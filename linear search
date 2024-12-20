@@ -1,0 +1,177 @@
+import java.util.*;
+
+public class UserInterface {
+    private static Scanner scanner = new Scanner(System.in);
+    private static DataManager dataManager = new DataManager();
+    private static LinearSearch linearSearch = new LinearSearch();
+
+    public static void main(String[] args) {
+        while (true) {
+            showMenu();
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    addElement();
+                    break;
+                case 2:
+                    searchElement();
+                    break;
+                case 3:
+                    displayElements();
+                    break;
+                case 4:
+                    removeElement();
+                    break;
+                case 5:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid choice, try again.");
+            }
+        }
+    }
+
+    private static void showMenu() {
+        System.out.println("\n*** Linear Search Operations ***");
+        System.out.println("1. Add Element");
+        System.out.println("2. Search Element");
+        System.out.println("3. Display Elements");
+        System.out.println("4. Remove Element");
+        System.out.println("5. Exit");
+        System.out.print("Enter your choice: ");
+    }
+
+    private static void addElement() {
+        System.out.println("Choose data structure to add element:");
+        System.out.println("1. Array");
+        System.out.println("2. List");
+        System.out.println("3. Text (String)");
+        System.out.println("4. Matrix (2D Array)");
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+        int value;
+        int row, col;
+
+        switch (choice) {
+            case 1:
+                System.out.print("Enter value to add to array: ");
+                value = scanner.nextInt();
+                dataManager.addToArray(value);
+                break;
+            case 2:
+                System.out.print("Enter value to add to list: ");
+                value = scanner.nextInt();
+                dataManager.addToList(value);
+                break;
+            case 3:
+                System.out.print("Enter character to add to text: ");
+                char charValue = scanner.nextLine().charAt(0);
+                dataManager.addToText(charValue);
+                break;
+            case 4:
+                System.out.print("Enter value to add to matrix: ");
+                value = scanner.nextInt();
+                System.out.print("Enter row: ");
+                row = scanner.nextInt();
+                System.out.print("Enter column: ");
+                col = scanner.nextInt();
+                dataManager.addToMatrix(value, row, col);
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
+
+    private static void searchElement() {
+        System.out.println("Choose data structure to search in:");
+        System.out.println("1. Array");
+        System.out.println("2. List");
+        System.out.println("3. Text (String)");
+        System.out.println("4. Matrix (2D Array)");
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+        int value, row, col;
+        int result;
+
+        switch (choice) {
+            case 1:
+                System.out.print("Enter value to search in array: ");
+                value = scanner.nextInt();
+                result = linearSearch.searchInArray(dataManager.getArray(), value);
+                System.out.println(result == -1 ? "Element not found" : "Element found at index: " + result);
+                break;
+            case 2:
+                System.out.print("Enter value to search in list: ");
+                value = scanner.nextInt();
+                result = linearSearch.searchInList(dataManager.getList(), value);
+                System.out.println(result == -1 ? "Element not found" : "Element found at index: " + result);
+                break;
+            case 3:
+                System.out.print("Enter character to search in text: ");
+                char charValue = scanner.nextLine().charAt(0);
+                result = linearSearch.searchInString(dataManager.getText(), charValue);
+                System.out.println(result == -1 ? "Character not found" : "Character found at index: " + result);
+                break;
+            case 4:
+                System.out.print("Enter value to search in matrix: ");
+                value = scanner.nextInt();
+                int[] position = linearSearch.searchIn2DArray(dataManager.getMatrix(), value);
+                if (position == null) {
+                    System.out.println("Element not found");
+                } else {
+                    System.out.println("Element found at row " + position[0] + ", column " + position[1]);
+                }
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
+
+    private static void displayElements() {
+        System.out.println("Choose data structure to display:");
+        System.out.println("1. Array");
+        System.out.println("2. List");
+        System.out.println("3. Text (String)");
+        System.out.println("4. Matrix (2D Array)");
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        switch (choice) {
+            case 1:
+                dataManager.displayArray();
+                break;
+            case 2:
+                dataManager.displayList();
+                break;
+            case 3:
+                dataManager.displayText();
+                break;
+            case 4:
+                dataManager.displayMatrix();
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
+
+    private static void removeElement() {
+        System.out.println("Choose data structure to remove element from:");
+        System.out.println("1. List");
+        int choice = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+        int value;
+
+        switch (choice) {
+            case 1:
+                System.out.print("Enter value to remove from list: ");
+                value = scanner.nextInt();
+                dataManager.removeFromList(value);
+                System.out.println("Element removed successfully.");
+                break;
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
+}
