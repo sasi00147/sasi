@@ -1,0 +1,107 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class User {
+    private String username;
+    private List<Expense> expenses;
+
+    public User(String username) {
+        this.username = username;
+        this.expenses = new ArrayList<>();
+    }
+
+    public void addExpense() {
+        System.out.print("Enter expense description: ");
+        String description = ExpenseTracker.scanner.nextLine();
+        System.out.print("Enter expense amount: ");
+        double amount = ExpenseTracker.scanner.nextDouble();
+        ExpenseTracker.scanner.nextLine(); // consume newline
+        System.out.print("Enter expense category: ");
+        String category = ExpenseTracker.scanner.nextLine();
+        
+        Expense expense = new Expense(description, amount, category);
+        expenses.add(expense);
+        System.out.println("Expense added successfully!");
+    }
+
+    public void viewExpenses() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses recorded.");
+        } else {
+            for (int i = 0; i < expenses.size(); i++) {
+                System.out.println((i + 1) + ". " + expenses.get(i));
+            }
+        }
+    }
+
+    public void editExpense() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses to edit.");
+            return;
+        }
+        System.out.print("Enter the expense number to edit: ");
+        int index = ExpenseTracker.scanner.nextInt() - 1;
+        if (index < 0 || index >= expenses.size()) {
+            System.out.println("Invalid expense number.");
+            return;
+        }
+
+        Expense expense = expenses.get(index);
+        ExpenseTracker.scanner.nextLine(); // consume newline
+        System.out.print("Enter new description (leave empty to keep current): ");
+        String description = ExpenseTracker.scanner.nextLine();
+        if (!description.isEmpty()) {
+            expense.setDescription(description);
+        }
+
+        System.out.print("Enter new amount (leave empty to keep current): ");
+        String amountInput = ExpenseTracker.scanner.nextLine();
+        if (!amountInput.isEmpty()) {
+            expense.setAmount(Double.parseDouble(amountInput));
+        }
+
+        System.out.print("Enter new category (leave empty to keep current): ");
+        String category = ExpenseTracker.scanner.nextLine();
+        if (!category.isEmpty()) {
+            expense.setCategory(category);
+        }
+
+        System.out.println("Expense updated.");
+    }
+
+    public void deleteExpense() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses to delete.");
+            return;
+        }
+        System.out.print("Enter the expense number to delete: ");
+        int index = ExpenseTracker.scanner.nextInt() - 1;
+        if (index < 0 || index >= expenses.size()) {
+            System.out.println("Invalid expense number.");
+            return;
+        }
+
+        expenses.remove(index);
+        System.out.println("Expense deleted.");
+    }
+
+    public void viewExpenseReport() {
+        if (expenses.isEmpty()) {
+            System.out.println("No expenses to report.");
+            return;
+        }
+
+        double totalAmount = 0;
+        System.out.println("\nExpense Report:");
+        for (Expense expense : expenses) {
+            System.out.println(expense);
+            totalAmount += expense.getAmount();
+        }
+        System.out.println("\nTotal Expenses: " + totalAmount);
+    }
+
+    public void saveData() {
+        DataPersistence.saveExpenses(expenses, username + "_expenses.dat");
+        System.out.println("Data saved successfully.");
+    }
+}
