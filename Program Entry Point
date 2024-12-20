@@ -1,0 +1,41 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Sample RSA keys (In practice, use secure key storage and management)
+        String encryptedKey = "your-encrypted-key"; 
+        String privateKey = "your-private-key";     
+        String publicKey = "your-public-key";      
+        
+        try {
+            System.out.println("Secure Email System");
+            System.out.println("1. Send Encrypted Email");
+            System.out.println("2. Receive and Decrypt Email");
+            System.out.println("Enter choice (1 or 2):");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 1) {
+                System.out.print("Enter recipient email address: ");
+                String to = scanner.nextLine();
+                System.out.print("Enter subject: ");
+                String subject = scanner.nextLine();
+                System.out.print("Enter message: ");
+                String message = scanner.nextLine();
+                
+                // Send encrypted email
+                EmailSender.sendEncryptedEmail(to, subject, message, encryptedKey);
+            } else if (choice == 2) {
+                // Receive and decrypt email
+                EmailReceiver.receiveAndDecryptEmail(encryptedKey);
+            } else {
+                System.out.println("Invalid choice.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
