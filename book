@@ -1,0 +1,100 @@
+import java.io.*;
+import java.util.*;
+
+public class BookManager {
+    private List<Book> books;
+    private final String FILE_NAME = "books.dat";
+
+    public BookManager() {
+        books = new ArrayList<>();
+        loadBooks();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+        saveBooks();
+    }
+
+    public void removeBook(String ISBN) {
+        books.removeIf(book -> book.getISBN().equals(ISBN));
+        saveBooks();
+    }
+
+    public Book findBookByISBN(String ISBN) {
+        for (Book book : books) {
+            if (book.getISBN().equals(ISBN)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public List<Book> searchBooksByTitle(String title) {
+        List<Book> foundBooks = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getTitle().toLowerCase().contains(title.toLowerCase())) {
+                foundBooks.add(book);
+            }
+        }
+        return foundBooks;
+    }
+
+    public List<Book> searchBooksByAuthor(String author) {
+        List<Book> foundBooks = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getAuthor().toLowerCase().contains(author.toLowerCase())) {
+                foundBooks.add(book);
+            }
+        }
+        return foundBooks;
+    }
+
+    public List<Book> searchBooksByCategory(String category) {
+        List<Book> foundBooks = new ArrayList<>();
+        for (Book book : books) {
+            if (book.getCategory().toLowerCase().contains(category.toLowerCase())) {
+                foundBooks.add(book);
+            }
+        }
+        return foundBooks;
+    }
+
+    public void updateBook(String ISBN, String title, String author, String category, int year) {
+        Book book = findBookByISBN(ISBN);
+        if (book != null) {
+            book.setTitle(title);
+            book.setAuthor(author);
+            book.setCategory(category);
+            book.setYear(year);
+            saveBooks();
+        }
+    }
+
+    public void displayAllBooks() {
+        if (books.isEmpty()) {
+            System.out.println("No books available.");
+        } else {
+            for (Book book : books) {
+                System.out.println(book);
+            }
+        }
+    }
+
+    private void saveBooks() {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+            out.writeObject(books);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadBooks() {
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
+            books = (List<Book>) in.readObject();
+        } catch (FileNotFoundException e) {
+            System.out.println("No previous data found. Starting fresh.");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}
